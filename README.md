@@ -34,4 +34,27 @@ You can use the following command if you have doubts about how to use any of the
 python pvsimulator/app.py --help
 ```
 
+## Utilities
+I you want to run in a Linux like environment I provide some docker utilities to do so. You need to have docker and docker-compose installed. Containers are created used the python:3 image from Dockerhub which are based on Debian.
 
+1. Inside the repository folder run:
+```
+docker-compose build
+```
+2. Start the rabbitmq service
+```
+docker-compose run --name rabbit rabbit
+```
+wait some seconds to allow the service to star properly
+3. In different terminals start the simulator service
+```
+docker-compose run simulator
+```
+or the meter service
+```
+docker-compose run meter
+```
+4. If you want to see the output file in simulator
+```
+docker-compose run simulator cat output.csv
+```
