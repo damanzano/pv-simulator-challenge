@@ -10,11 +10,12 @@ class Simulator(object):
     simulated a PV power values each time a meter values is received from
     the queue. 
     """
-    def __init__(self, broker_host, broker_port, queue_name, outfile):
+    def __init__(self, broker_host, broker_port, queue_name, username, password, outfile):
         self._logger = logging.getLogger("pvsimulator.simulator")
         self._broker_host = broker_host
         self._broker_port = broker_port
         self._queue_name = queue_name
+        self._credentials = pika.PlainCredentials(username, password)
         self._outfile = outfile
         
     def start(self):
@@ -26,7 +27,10 @@ class Simulator(object):
             connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=self._broker_host, 
-                    port=self._broker_port))
+                    port=self._broker_port,
+                    credentials=self._credentials
+                    )
+            )
             channel = connection.channel()
             # Ensure provided queue is available to listen
             channel.basic_qos(prefetch_count=1)

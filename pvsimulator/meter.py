@@ -7,12 +7,12 @@ class Meter(object):
     """Meter class objects connect to a broker queue and publish random
     power values to it continously
     """
-    def __init__(self, broker_host, broker_port, queue_name):
+    def __init__(self, broker_host, broker_port, queue_name, username, password):
         self._logger = logging.getLogger("pvsimulator.simulator")
         self._broker_host = broker_host
         self._broker_port = broker_port
         self._queue_name = queue_name
-        
+        self._credentials = pika.PlainCredentials(username, password)
     def start(self):
         """This method is in charge of establishing connection with desired 
         broker and start sending message to the queue
@@ -22,7 +22,10 @@ class Meter(object):
             connection = pika.BlockingConnection(
                 pika.ConnectionParameters(
                     host=self._broker_host, 
-                    port=self._broker_port))
+                    port=self._broker_port,
+                    credentials=self._credentials
+                    )
+            )
             channel = connection.channel()
             # Ensure provided queue is avaialable to publish messages
             channel.queue_declare(queue=self._queue_name, durable=True)

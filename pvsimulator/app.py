@@ -7,11 +7,11 @@ from pvsimulator.meter import Meter
 from pvsimulator.simulator import Simulator
 
 def start_meter(args):
-    meter = Meter(args.broker, args.port, args.queue)
+    meter = Meter(args.broker, args.port, args.queue, args.username, args.password)
     meter.start()
 
 def start_simulator(args):
-    simulator = Simulator(args.broker ,args.port, args.queue, args.outfile)
+    simulator = Simulator(args.broker, args.port, args.queue, args.username, args.password, args.outfile)
     simulator.start()
 
 def main():
@@ -36,6 +36,8 @@ def main():
     parser_meter.add_argument("-b", "--broker", type=str, required=True, help="Broker url")
     parser_meter.add_argument("-p", "--port", type=int, required=True, help="Broker port")
     parser_meter.add_argument("-q", "--queue", type=str, required=True, help="Broker queue")
+    parser_meter.add_argument("-u", "--username", type=str, required=True, help="username")
+    parser_meter.add_argument("-x", "--password", type=str, required=True, help="password")
     parser_meter.set_defaults(func=start_meter)
 
     # Parser for "start-simulator" command
@@ -43,6 +45,8 @@ def main():
     parser_simulator.add_argument("-b", "--broker", type=str, required=True, help="Broker url")
     parser_simulator.add_argument("-p", "--port", type=int, required=True, help="Broker port")
     parser_simulator.add_argument("-q", "--queue", type=str, required=True, help="Broker queue")
+    parser_simulator.add_argument("-u", "--username", type=str, required=True, help="username")
+    parser_simulator.add_argument("-x", "--password", type=str, required=True, help="password")
     parser_simulator.add_argument("-o", "--outfile", default="output.csv", help="Output file path")
     parser_simulator.set_defaults(func=start_simulator)
     
