@@ -2,6 +2,7 @@
 import logging
 import pika
 import random
+import time
 
 class Meter(object):
     """Meter class objects connect to a broker queue and publish random
@@ -60,6 +61,8 @@ class Meter(object):
                     )
                 )
                 self._logger.info(f"Sent {value:.2f}")
+                # wait some seconds to not flood the queue
+                time.sleep(2)
             except pika.exceptions.UnroutableError:
                 self._logger.warn('Message was returned')
                 continue

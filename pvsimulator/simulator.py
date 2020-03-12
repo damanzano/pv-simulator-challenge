@@ -53,9 +53,7 @@ class Simulator(object):
         except pika.exceptions.AMQPChannelError as err:
             self._logger.error(f"Caught a channel error: {err}, stopping...")
         except pika.exceptions.AMQPConnectionError as err:
-            self._logger.error("Unable to connect to broker")
-            self._logger.exception(err)
-        
+            self._logger.error("Unable to connect to broker")  
     
     def __receive(self, channel, method, properties, body):
         """This method is in charge of processing new values comming from queue
@@ -80,8 +78,10 @@ class Simulator(object):
     def __write_record(self, record):
         """This method write new records into output file
         """
+        self._logger.info(f"Writting record to file")
         with open(self._outfile, 'a', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=record.keys())
             writer.writerow(record)
+        self._logger.info(f"Record {record} written to file")
         
         
